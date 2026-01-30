@@ -1,0 +1,64 @@
+name: Build Synology SPK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Cache Toolkit Tarballs
+      id: cache-toolkit
+      uses: actions/cache@v3
+      with:
+        path: toolkit_tarballs
+        key: toolkit-7.2-apollolake-v1
+
+    - name: Prepare Workspace
+      run: |
+        # Create source directory as expected by buildSPK.sh
+        mkdir -p source
+        
+        # Copy the package to the source directory
+        # Adjust 'web_package_example' if your package directory name is different
+        cp -r web_package_example source/
+        
+        # Ensure scripts are executable
+        chmod +x buildSPK.sh
+
+    - name: Patch buildSPK.sh
+      run: |
+        # 1. Update workdir to the current GitHub Workspace
+        sed -i 's|workdir="/home/brian/myspktoolkit"|workdir=$(pwd)|' buildSPK.sh
+        
+        # 2. Comment out npm registry setting (optional, prevents issues with deprecated taobao certs in CI)
+        sed -i 's|sudo npm config set registry|# sudo npm config set registry|' buildSPK.sh
+        
+        # Verify the change
+        grep "workdir=" buildSPK.sh | head -n 1
+
+    - name: Run Build Script
+      run: |
+        # The script handles dependency installation and environment setup
+        ./buildSPK.sh
+
+    - name: Fix Permissions for Cache
+      if: always()
+      run: |
+        # Ensure toolkit_tarballs are owned by the runner user so they can be cached
+        if [ -d "toolkit_tarballs" ]; then
+          sudo chown -R $USER:$USER toolkit_tarballs
+        fi
+
+    - name: Upload SPK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: synology-spk
+        path: result_spk/**/*.spk
