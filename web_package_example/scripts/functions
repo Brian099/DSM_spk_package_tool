@@ -1,0 +1,20 @@
+### 此文件可以定义一些基础变量或功能
+### 引用方法：
+
+# INST_FUNCTIONS=$(dirname $0)"/functions"
+# if [ -r "${INST_FUNCTIONS}" ]; then
+#    . "${INST_FUNCTIONS}"
+# fi
+
+### 定义常用命令及附带的参数
+MV="/bin/mv -f"
+RM="/bin/rm -rf"
+CP="/bin/cp -rfp"
+MKDIR="/bin/mkdir -p"
+LN="/bin/ln -nsf"
+TEE="/usr/bin/tee -a"
+RSYNC="/bin/rsync -avh"
+TAR="/bin/tar"
+
+### 使用方法：
+# $MV a b

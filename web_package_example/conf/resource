@@ -1,0 +1,64 @@
+{
+    "systemd-unit": {},
+    "webservice": {
+        "migrate": {
+            "vhost": [
+                {
+                    "root": "aaaa",
+                    "service": "aaaa"
+                }
+            ]
+        },
+        "pkg_dir_prepare": [
+            {
+                "group": "http",
+                "mode": "0755",
+                "source": "/var/packages/aaaa/target/src",
+                "target": "aaaa",
+                "user": "aaaa"
+            }
+        ],
+        "portals": [
+            {
+                "http_port": [11100],
+                "alias": "aaaa",
+                "app": "com.ccc.app",
+                "name": "aaaa",
+                "service": "aaaa",
+                "type": "server"
+            }
+        ],
+        "services": [
+            {
+                "backend": 1,
+                "connect_timeout": 60,
+                "display_name": "bbbb",
+                "icon": "ui/MyIcon_{0}.png",
+                "php": {
+                    "backend": 9,
+                    "extensions": ["curl", "gd", "iconv", "intl", "mysql", "mysqli", "openssl", "pdo_mysql", "phar", "sockets", "zlib"],
+                    "group": "http",
+                    "open_basedir": "/var/services/web_packages/aaaa:/tmp:/var/services/tmp",
+                    "php_settings": {
+                        "mysql.default_socket": "/run/mysqld/mysqld10.sock",
+                        "mysqli.default_socket": "/run/mysqld/mysqld10.sock",
+                        "pdo_mysql.default_socket": "/run/mysqld/mysqld10.sock",
+                        "max_execution_time": "900",
+                        "post_max_size": "1024M",
+                        "upload_max_filesize": "1024M"
+                    },
+                    "profile_desc": "PHP Profile for aaaa",
+                    "profile_name": "aaaa Profile",
+                    "user": "aaaa"
+                },
+                "read_timeout": 3600,
+                "root": "/var/services/web_packages/aaaa",
+                "send_timeout": 60,
+                "service": "aaaa",
+                "support_alias": true,
+                "support_server": true,
+                "type": "nginx_php"
+            }
+        ]
+    }
+}
